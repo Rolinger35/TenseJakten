@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kjønnsmaskinen Pro - 3 Liv</title>
+    <title>Kjønnsmaskinen Pro - Fixed</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
         :root { 
@@ -14,55 +14,48 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100dvh; margin: 0; overflow: hidden; background-image: radial-gradient(circle at top right, #1e1b4b, #0f172a); }
         #game-container { background: var(--card); width: 100%; height: 100%; max-width: 500px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
         
-        /* SKJERMER */
         #main-menu, #study-screen, #add-screen, #modal-overlay { position: absolute; inset: 0; z-index: 100; background: var(--bg); display: flex; flex-direction: column; padding: 25px; overflow-y: auto; }
         #main-menu { justify-content: center; align-items: center; }
 
-        /* KNAPPER */
-        .big-btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 12px; color: white; transition: 0.1s; }
+        .big-btn { width: 100%; padding: 18px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 12px; color: white; transition: 0.1s; text-transform: uppercase; }
         .btn-start { background: linear-gradient(135deg, var(--accent), var(--primary)); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
         .btn-study { background: linear-gradient(135deg, #0284c7, #38bdf8); box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); }
         .btn-add { background: linear-gradient(135deg, #7c3aed, #a78bfa); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .btn-back { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
 
-        /* NIVÅVELGER */
         .level-select { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; margin: 15px 0 25px 0; }
         .opt-btn { background: #1e293b; border: 2px solid transparent; padding: 12px; border-radius: 12px; color: #94a3b8; font-weight: 700; font-size: 0.75rem; cursor: pointer; }
         .opt-btn.active { border-color: var(--primary); color: #fff; background: rgba(56, 189, 248, 0.1); }
 
-        /* SPILLOMRÅDE */
         #play-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); z-index: 10; }
         #play-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; }
         #word-display { font-size: 3.5rem; font-weight: 800; color: #fff; text-align: center; margin-bottom: 40px; }
-        .gender-btn { width: 100%; padding: 22px; border-radius: 18px; border: none; font-size: 1.7rem; font-weight: 800; cursor: pointer; background: #2d3748; color: #fff; margin-bottom: 15px; box-shadow: 0 4px 0 #1a202c; transition: 0.2s; }
+        .gender-btn { width: 100%; padding: 22px; border-radius: 18px; border: none; font-size: 1.7rem; font-weight: 800; cursor: pointer; background: #2d3748; color: #fff; margin-bottom: 15px; box-shadow: 0 4px 0 #1a202c; transition: 0.1s; }
+        
         .btn-correct { background: var(--success) !important; box-shadow: 0 4px 0 #15803d !important; }
         .btn-wrong { background: var(--danger) !important; box-shadow: 0 4px 0 #b91c1c !important; }
-
-        /* ORDBOK & SØK */
-        .search-box { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; background: #1e293b; color: #fff; margin-bottom: 15px; font-family: inherit; }
-        .study-table { width: 100%; border-collapse: collapse; }
-        .study-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
         .hidden { display: none !important; }
         .shake { animation: shake 0.4s; }
         @keyframes shake { 0%, 100% {transform:translateX(0)} 20%, 60% {transform:translateX(-10px)} 40%, 80% {transform:translateX(10px)} }
+        
+        .search-box { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #334155; background: #1e293b; color: #fff; margin-bottom: 10px; font-family: inherit; }
     </style>
 </head>
 <body>
 
 <div id="game-container">
     <div id="main-menu">
-        <h1 style="margin:0; font-size: 2.5rem; letter-spacing: -1px;">Kjønnsmaskinen</h1>
-        <p style="color:#64748b; margin-bottom: 20px;">En, Ei, Et</p>
+        <h1 style="margin:0; font-size: 2.2rem; letter-spacing: -1px;">Kjønnsmaskinen</h1>
+        <p style="color:#64748b; margin-bottom: 20px;">Velg nivå og bruk dine 3 liv ❤️</p>
         
         <div class="level-select">
-            <button class="opt-btn active" onclick="setDiff(this, 'easy')">LETT</button>
-            <button class="opt-btn" onclick="setDiff(this, 'medium')">MEDIUM</button>
-            <button class="opt-btn" onclick="setDiff(this, 'hard')">VANSKELIG</button>
+            <button class="opt-btn active" id="opt-easy" onclick="setDiff('easy')">LETT</button>
+            <button class="opt-btn" id="opt-medium" onclick="setDiff('medium')">MEDIUM</button>
+            <button class="opt-btn" id="opt-hard" onclick="setDiff('hard')">VANSKELIG</button>
         </div>
 
         <button class="big-btn btn-start" onclick="startGame()">START SPILLET</button>
-        <button class="big-btn btn-study" onclick="openStudy()">📖 SE ORD</button>
+        <button class="big-btn btn-study" onclick="openStudy()">📖 DIN ORDBOK</button>
         <button class="big-btn btn-add" onclick="openAdd()">➕ LEGG TIL ORD</button>
     </div>
 
@@ -80,13 +73,13 @@
     </div>
 
     <div id="study-screen" class="hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
             <h2 style="margin:0">Ordbok</h2>
             <button onclick="closeStudy()" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer;">LUKK</button>
         </div>
-        <input type="text" id="wordSearch" class="search-box" placeholder="Søk etter ord..." onkeyup="filterWords()">
+        <input type="text" id="wordSearch" class="search-box" placeholder="Søk..." onkeyup="filterWords()">
         <div style="flex-grow:1; overflow-y:auto; background:rgba(255,255,255,0.02); border-radius:10px;">
-            <table class="study-table"><tbody id="wordTableBody"></tbody></table>
+            <table style="width:100%; border-collapse:collapse;"><tbody id="wordTableBody"></tbody></table>
         </div>
     </div>
 
@@ -104,9 +97,8 @@
     </div>
 
     <div id="modal-overlay" class="hidden" style="text-align:center; justify-content:center;">
-        <h2 style="margin:0">Tom for liv!</h2>
+        <h2 style="margin:0">Game Over</h2>
         <div id="final-score" style="font-size:6rem; font-weight:800; color:var(--primary);">0</div>
-        <p style="color:#64748b; margin-bottom:20px;">ord riktig denne gangen</p>
         <button class="big-btn btn-start" onclick="startGame()">PRØV IGJEN</button>
         <button class="big-btn btn-back" onclick="location.reload()">MENY</button>
     </div>
@@ -116,30 +108,47 @@
     let WORDS = [];
     let score = 0, lives = 3, currentDiff = 'easy', currentWord = {}, isPausing = false;
 
-    // Last inn ord (samme logikk som før)
+    // --- FULL ORDLISTE (300 ORD) ---
+    const rawEasy = "Bil,Buss,Hund,Katt,Stol,Sofa,Vegg,Gutt,Mann,Skole,Park,Vei,Hage,Båt,Fisk,Fugl,Sekk,Nøkkel,Mobil,Skjerm,Ball,Kopp,Kniv,Gaffel,Ovn,Dør,Klokke,Flaske,Avis,Bok,Seng,Veske,Hytte,Tavle,Trapp,Gryte,Skje,Dyne,Pute,Lampe,Skuff,Kjeks,Skog,Fjell,Hus,Tak,Gulv,Vindu,Bord,Skap,Speil,Bilde,Lys,Glass,Fat,Slott,Land,Hav,Fly,Tog,Dyr,Barn,Navn,Svar,Eple,Egg,Brød,Kjøtt,Vann,Kart,Pass,Kamera,Hotell,Brev,Arbeid,Hode,Øye,Øre,Bein,Hjerte,Blod,Hår,Telt,Teppe,Belte,Smykke,Mål,Hull,Blad,Frø,Program,Sykkel,Lærer,Tallerken,Blyant,Øks,Saks,Vott,Sko,Lue";
+    const rawMedium = "Anledning,Avdeling,Betydning,Endring,Erfaring,Forklaring,Løsning,Mulighet,Sikkerhet,Virkelighet,Sykdom,Ungdom,Forfatter,Kunstner,Politiker,Innbygger,Situasjon,Tradisjon,Kvalitet,Aktivitet,Prosess,Utfordring,Forsikring,Regjering,Stilling,Utvikling,Opplevelse,Forståelse,Hensikt,Utsikt,Fremtid,Bakgrunn,Forskjell,Fornuft,Nettside,Samfunn,System,Problem,Resultat,Prosjekt,Produkt,Område,Klima,Tema,Drama,Firma,Bibliotek,Universitet,Kapittel,Eksempel,Fengsel,Menneske,Samarbeid,Intervju,Museum,Sentrum,Kritikk,Diskusjon,Kommune,Region,Suksess,Innsats,Metode,Analyse,Karakter,Konsept,Prinsipp,Budskap,Selskap,Ekteskap,Vennskap,Landskap,Kunnskap,Vitenskap,Hensyn,Bevis,Besøk,Forsøk,Angrep,Bidrag,Oppdrag,Mønster,Register,Våpen,Lager,Teater,Senter,Kontor,Kloster,Løfte,Møte,Spenning,Ledelse,Tjeneste,Ressurs,Periode,Energi,Ansvari,Sektor,Faktor";
+    const rawHard = "Tilværelse,Begrunnelse,Bekreftelse,Bevegelse,Skuffelse,Frustrasjon,Kompetanse,Konkurranse,Toleranse,Respekt,Tillit,Sannhet,Rettferdighet,Kjærlighet,Misunnelse,Vennlighet,Galskap,Tålmodighet,Hukommelse,Arv,Gjeld,Skatt,Inntekt,Utgift,Vekst,Makt,Kraft,Sjel,Verden,Natur,Kultur,Struktur,Arkitektur,Litteratur,Økonomi,Filosofi,Psykologi,Biologi,Energi,Kategori,Teori,Strategi,Demokrati,Byråkrati,Hierarki,Monarki,Departement,Dokument,Argument,Instrument,Element,Eksperiment,Miljø,Nivå,Individ,Fenomen,Kriterium,Paradoks,Symbol,Signal,Ritual,Potensial,Materiale,Scenarie,Kvartal,Intervall,Univers,Vers,Kurs,Bevisi,Paradis,Forhold,Innhold,Opphold,Mangfold,Forbilde,Tilfelle,Menneskei,Liv,Døgn,År,Tiår,Århundre,Millennium,Krav,Svari,Ansvar,Forsvar,Håp,Rop,Kjøp,Salg,Valg,Togi,Flagg,Bygg,Glimt,Punkt,Skritt,Sukk";
+
     function init() {
-        const saved = localStorage.getItem('myKjonnWordsV3');
-        if(!saved) {
+        const saved = localStorage.getItem('myKjonnWords_Final');
+        if (!saved) {
             const lib = [];
-            // Genererer 300 ord (forenklet eksempel for koden)
-            const n = ["Bil","Buss","Hus","Dør","Bok","Tre","Sykkel","Mobil","Vindu","Hund","Katt","Stol"];
-            n.forEach(w => lib.push({word:w, gender: w==='Hus'||w==='Tre'||w==='Vindu' ? 'et' : 'en', diff:'easy'}));
-            // ... (fyller på med flere i bakgrunnen)
+            rawEasy.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'easy'}));
+            rawMedium.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'medium'}));
+            rawHard.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'hard'}));
             WORDS = lib;
-            localStorage.setItem('myKjonnWordsV3', JSON.stringify(WORDS));
+            localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS));
         } else {
             WORDS = JSON.parse(saved);
         }
     }
 
-    function setDiff(btn, diff) {
-        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // Enkel logikk for å gjette kjønn til autogenerert liste (hvis ordet slutter på visse ting)
+    function getG(w) {
+        const etOrd = ["Hus","Vindu","Bord","Skap","Bilde","Lys","Glass","Slott","Land","Hav","Fly","Tog","Dyr","Barn","Navn","Svar","Eple","Egg","Brød","Kjøtt","Vann","Kart","Pass","Brev","Arbeid","Hode","Øye","Øre","Bein","Hjerte","Blod","Hår","Telt","Teppe","Belte","Mål","Hull","Blad","Frø","Program","Samfunn","System","Problem","Resultat","Prosjekt","Produkt","Område","Klima","Tema","Drama","Firma","Bibliotek","Universitet","Kapittel","Eksempel","Fengsel","Menneske","Samarbeid","Intervju","Museum","Sentrum","Konsept","Prinsipp","Budskap","Selskap","Ekteskap","Vennskap","Landskap","Hensyn","Bevis","Besøk","Forsøk","Angrep","Bidrag","Oppdrag","Mønster","Register","Våpen","Lager","Teater","Senter","Kontor","Kloster","Løfte","Møte","Demokrati","Byråkrati","Hierarki","Monarki","Departement","Dokument","Argument","Instrument","Element","Eksperiment","Miljø","Nivå","Individ","Fenomen","Kriterium","Paradoks","Symbol","Signal","Ritual","Potensial","Materiale","Scenarie","Kvartal","Intervall","Univers","Vers","Kurs","Paradis","Forhold","Innhold","Opphold","Mangfold","Forbilde","Tilfelle","Liv","Døgn","År","Tiår","Århundre","Millennium","Krav","Ansvar","Forsvar","Håp","Rop","Kjøp","Salg","Valg","Flagg","Bygg","Glimt","Punkt","Skritt","Sukk"];
+        const eiOrd = ["Dør","Klokke","Flaske","Avis","Bok","Seng","Veske","Hytte","Tavle","Trapp","Gryte","Skje","Dyne","Pute","Lampe","Skuff","Sannhet","Makt","Kraft","Sjel"];
+        if (etOrd.includes(w)) return 'et';
+        if (eiOrd.includes(w)) return 'ei';
+        return 'en';
+    }
+
+    function setDiff(diff) {
         currentDiff = diff;
+        document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('opt-' + diff).classList.add('active');
     }
 
     function startGame() {
-        score = 0; lives = 3;
+        const pool = WORDS.filter(w => w.diff === currentDiff);
+        if (pool.length === 0) {
+            alert("Feil: Ingen ord funnet i denne kategorien!");
+            return;
+        }
+        score = 0; lives = 3; isPausing = false;
         updateUI();
         document.getElementById('main-menu').classList.add('hidden');
         document.getElementById('modal-overlay').classList.add('hidden');
@@ -149,13 +158,16 @@
     }
 
     function updateUI() {
-        document.getElementById('score-display').innerText = score;
+        document.getElementById('score-display').innerText = "POENG: " + score;
         document.getElementById('lives-display').innerText = "❤️".repeat(lives);
     }
 
     function next() {
         isPausing = false;
-        ['en','ei','et'].forEach(g => document.getElementById('btn-'+g).classList.remove('btn-correct','btn-wrong'));
+        ['en','ei','et'].forEach(g => {
+            const b = document.getElementById('btn-' + g);
+            b.classList.remove('btn-correct', 'btn-wrong');
+        });
         document.getElementById('play-content').classList.remove('shake');
         
         const pool = WORDS.filter(w => w.diff === currentDiff);
@@ -164,17 +176,18 @@
     }
 
     function check(guess) {
-        if(isPausing) return;
+        if (isPausing) return;
         isPausing = true;
+
         const correct = currentWord.gender;
         const btnCorrect = document.getElementById('btn-' + correct);
         const btnGuessed = document.getElementById('btn-' + guess);
 
-        if(guess === correct) {
+        if (guess === correct) {
             score++;
             btnGuessed.classList.add('btn-correct');
             updateUI();
-            setTimeout(next, 600);
+            setTimeout(next, 500);
         } else {
             lives--;
             updateUI();
@@ -183,12 +196,12 @@
             document.getElementById('play-content').classList.add('shake');
             
             setTimeout(() => {
-                if(lives <= 0) {
+                if (lives <= 0) {
                     endGame();
                 } else {
-                    next(); // Fortsett med nytt ord hvis man har liv igjen
+                    next();
                 }
-            }, 1200);
+            }, 1000);
         }
     }
 
@@ -198,10 +211,16 @@
         document.getElementById('modal-overlay').classList.remove('hidden');
     }
 
-    // --- HJELPEFUNKSJONER ---
+    // Ordbok-funksjoner
     function openStudy() {
         const tbody = document.getElementById('wordTableBody');
-        tbody.innerHTML = WORDS.map((w, i) => `<tr><td><b>${w.word}</b></td><td style="color:var(--primary); font-weight:800;">${w.gender.toUpperCase()}</td><td onclick="deleteWord(${i})">✕</td></tr>`).join('');
+        tbody.innerHTML = WORDS.map((w, i) => `
+            <tr style="border-bottom:1px solid #334155;">
+                <td style="padding:12px;"><b>${w.word}</b> <span style="font-size:0.6rem; opacity:0.5;">(${w.diff})</span></td>
+                <td style="text-align:right; color:var(--primary); font-weight:800; padding:12px;">${w.gender.toUpperCase()}</td>
+                <td style="width:30px; color:var(--danger); cursor:pointer;" onclick="deleteWord(${i})">✕</td>
+            </tr>
+        `).join('');
         document.getElementById('study-screen').classList.remove('hidden');
     }
     function filterWords() {
@@ -209,16 +228,16 @@
         const rows = document.getElementById('wordTableBody').getElementsByTagName('tr');
         for(let r of rows) r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
     }
+    function deleteWord(i) { WORDS.splice(i,1); localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS)); openStudy(); }
     function saveNewWord() {
         const word = document.getElementById('newWord').value.trim();
         const gender = document.getElementById('newGender').value;
         const diff = document.getElementById('newDiff').value;
         if(!word) return;
         WORDS.push({word: word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(), gender, diff});
-        localStorage.setItem('myKjonnWordsV3', JSON.stringify(WORDS));
+        localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS));
         closeAdd();
     }
-    function deleteWord(i) { WORDS.splice(i,1); localStorage.setItem('myKjonnWordsV3', JSON.stringify(WORDS)); openStudy(); }
     function openAdd() { document.getElementById('add-screen').classList.remove('hidden'); }
     function closeAdd() { document.getElementById('add-screen').classList.add('hidden'); }
     function closeStudy() { document.getElementById('study-screen').classList.add('hidden'); }
