@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kjønnsjakten Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+
+        :root {
+            --bg: #0b0f1a;
+            --card: #161e2d;
+            --primary: #38bdf8;
+            --en: #3b82f6;
+            --ei: #f472b6;
+            --et: #a855f7;
+            --text: #f1f5f9;
+            --easy: #22c55e;
+            --medium: #eab308;
+            --hard: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 35%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.15) 0%, transparent 35%);
+            color: var(--text);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; overflow: hidden;
+        }
+
+        #game-container {
+            background: var(--card);
+            padding: 3rem 2rem;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+            width: 90%; max-width: 420px;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-height: 600px;
+            display: flex; flex-direction: column;
+        }
+
+        /* --- HOVEDMENY DESIGN --- */
+        .menu-header { margin-bottom: 2.5rem; }
+        .menu-title { font-size: 2.4rem; font-weight: 800; letter-spacing: -1.5px; margin: 0; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .menu-subtitle { color: #64748b; font-size: 0.95rem; margin-top: 0.5rem; }
+
+        .level-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+        }
+
+        .level-icon {
+            width: 48px; height: 48px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-right: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .level-info h3 { margin: 0; font-size: 1.1rem; font-weight: 700; }
+        .level-info p { margin: 2px 0 0; font-size: 0.8rem; color: #64748b; }
+
+        /* Level Specific Colors */
+        .card-easy:hover { border-color: var(--easy); background: rgba(34, 197, 94, 0.05); }
+        .card-easy .level-icon { background: rgba(34, 197, 94, 0.1); color: var(--easy); }
+        .card-easy:hover .level-icon { background: var(--easy); color: #fff; transform: scale(1.1); }
+
+        .card-medium:hover { border-color: var(--medium); background: rgba(234, 179, 8, 0.05); }
+        .card-medium .level-icon { background: rgba(234, 179, 8, 0.1); color: var(--medium); }
+        .card-medium:hover .level-icon { background: var(--medium); color: #fff; transform: scale(1.1); }
+
+        .card-hard:hover { border-color: var(--hard); background: rgba(239, 68, 68, 0.05); }
+        .card-hard .level-icon { background: rgba(239, 68, 68, 0.1); color: var(--hard); }
+        .card-hard:hover .level-icon { background: var(--hard); color: #fff; transform: scale(1.1); }
+
+        /* --- GAMEPLAY & MODAL (Beholdt fra forrige) --- */
+        #word-display { font-size: 3.8rem; font-weight: 800; margin: 3rem 0; letter-spacing: -2px; color: #fff; }
+        .back-arrow { position: absolute; top: 30px; left: 30px; font-size: 1.2rem; cursor: pointer; color: var(--primary); opacity: 0.6; z-index: 10; transition: 0.3s; }
+        .back-arrow:hover { opacity: 1; transform: translateX(-3px); }
+        
+        .article-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .btn-choice { padding: 25px 0; border: none; border-radius: 20px; font-size: 1.2rem; font-weight: 800; color: white; cursor: pointer; transition: 0.2s; }
+        .btn-en { background: var(--en); box-shadow: 0 8px 20px -6px var(--en); }
+        .btn-ei { background: var(--ei); box-shadow: 0 8px 20px -6px var(--ei); }
+        .btn-et { background: var(--et); box-shadow: 0 8px 20px -6px var(--et); }
+        .btn-choice:hover { transform: translateY(-4px); filter: brightness(1.1); }
+
+        #modal-overlay { position: absolute; inset: 0; background: var(--card); border-radius: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; padding: 2rem; box-sizing: border-box; }
+        .btn-modal { width: 100%; max-width: 280px; padding: 18px 0; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: 0.3s; margin-bottom: 12px; text-align: center; }
+        .btn-restart { background: var(--en); color: white; box-shadow: 0 8px 24px -6px rgba(59, 130, 246, 0.5); }
+        .btn-menu { background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); }
+        .btn-menu:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--primary); color: #fff; }
+
+        .hidden { display: none !important; }
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="setup-screen">
+        <div class="menu-header">
+            <h1 class="menu-title">Kjønnsjakten</h1>
+            <p class="menu-subtitle">Velg vanskelighetsgrad for å starte</p>
+        </div>
+        
+        <div class="level-card card-easy" onclick="startGame('easy')">
+            <div class="level-icon">🌱</div>
+            <div class="level-info">
+                <h3>Lett</h3>
+                <p>Enkle hverdagsord og basis-artikler</p>
+            </div>
+        </div>
+
+        <div class="level-card card-medium" onclick="startGame('medium')">
+            <div class="level-icon">🚀</div>
+            <div class="level-info">
+                <h3>Medium</h3>
+                <p>Vanlige ord og litt lengre substantiv</p>
+            </div>
+        </div>
+
+        <div class="level-card card-hard" onclick="startGame('hard')">
+            <div class="level-icon">🧠</div>
+            <div class="level-info">
+                <h3>Ekspert</h3>
+                <p>Abstrakte ord og vanskelige unntak</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="play-screen" class="hidden">
+        <div class="back-arrow" onclick="goBack()">←</div>
+        <div style="display: flex; justify-content: space-between; font-weight: 700; color: #64748b; font-size: 0.85rem; margin-bottom: 1rem;">
+            <span>LIV: <span id="lives" style="color:#fff">3</span></span>
+            <span id="diff-label" style="color:var(--primary)">LETT</span>
+            <span>SCORE: <span id="score" style="color:#fff">0</span></span>
+        </div>
+
+        <div id="word-display">BIL</div>
+
+        <div class="article-grid">
+            <button class="btn-choice btn-en" onclick="checkAnswer('en')">EN</button>
+            <button class="btn-choice btn-ei" onclick="checkAnswer('ei')">EI</button>
+            <button class="btn-choice btn-et" onclick="checkAnswer('et')">ET</button>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <h2 style="margin-bottom: 0.5rem; font-size: 2rem;">Game Over</h2>
+        <p id="modal-msg" style="color: #94a3b8; margin-bottom: 2rem; text-align: center; font-size: 0.95rem;"></p>
+        
+        <div style="font-size: 0.7rem; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;">Total Score</div>
+        <div style="font-size: 5rem; font-weight: 800; margin-bottom: 3rem; line-height: 1; color: #fff;" id="final-score">0</div>
+        
+        <button class="btn-modal btn-restart" onclick="restartGame()">Spill igjen</button>
+        <button class="btn-modal btn-menu" onclick="goBack()">Hovedmeny</button>
+    </div>
+</div>
+
+<script>
+    const WORDS = {
+        easy: [
+            {w:'Bil', a:'en'}, {w:'Bok', a:'ei'}, {w:'Hus', a:'et'}, {w:'Stol', a:'en'}, {w:'Bord', a:'et'},
+            {w:'Dør', a:'ei'}, {w:'Vindu', a:'et'}, {w:'Gutt', a:'en'}, {w:'Jente', a:'ei'}, {w:'Barn', a:'et'},
+            {w:'Hund', a:'en'}, {w:'Katt', a:'en'}, {w:'Seng', a:'ei'}, {w:'Skole', a:'en'}, {w:'Tre', a:'et'},
+            {w:'Blomst', a:'en'}, {w:'Vei', a:'en'}, {w:'Fjell', a:'et'}, {w:'Vann', a:'et'}, {w:'Brød', a:'et'},
+            {w:'Melk', a:'ei'}, {w:'Kopp', a:'en'}, {w:'Kniv', a:'en'}, {w:'Skje', a:'ei'}, {w:'Gaffel', a:'en'},
+            {w:'Glass', a:'et'}, {w:'Sol', a:'ei'}, {w:'Måne', a:'en'}, {w:'Stjerne', a:'ei'}, {w:'Sky', a:'ei'},
+            {w:'Fly', a:'et'}, {w:'Tog', a:'et'}, {w:'Båt', a:'en'}, {w:'Sykkel', a:'en'}, {w:'Veske', a:'ei'},
+            {w:'Lue', a:'ei'}, {w:'Jakke', a:'ei'}, {w:'Sko', a:'en'}, {w:'Bukse', a:'ei'}, {w:'Tallerken', a:'en'}
+        ],
+        medium: [
+            {w:'Vaskemaskin', a:'en'}, {w:'Oppvaskmaskin', a:'en'}, {w:'Datamaskin', a:'en'}, {w:'Telefon', a:'en'},
+            {w:'Leilighet', a:'en'}, {w:'Sykehus', a:'et'}, {w:'Bibliotek', a:'et'}, {w:'Kontor', a:'et'},
+            {w:'Utfordring', a:'ei'}, {w:'Mulighet', a:'ei'}, {w:'Sannhet', a:'ei'}, {w:'Historie', a:'ei'},
+            {w:'Samtale', a:'en'}, {w:'Beslutning', a:'en'}, {w:'Erfaring', a:'ei'}, {w:'Kunnskap', a:'en'},
+            {w:'Vennskap', a:'et'}, {w:'Ekteskap', a:'et'}, {w:'Menneske', a:'et'}, {w:'Problem', a:'et'},
+            {w:'Spørsmål', a:'et'}, {w:'Svar', a:'et'}, {w:'Bilde', a:'et'}, {w:'Speil', a:'et'},
+            {w:'Kjøleskap', a:'et'}, {w:'Sommer', a:'en'}, {w:'Vinter', a:'en'}, {w:'Høst', a:'en'},
+            {w:'Vår', a:'en'}, {w:'Klokke', a:'ei'}, {w:'Avis', a:'ei'}, {w:'Hjerte', a:'et'}
+        ],
+        hard: [
+            {w:'Begrep', a:'et'}, {w:'Forhold', a:'et'}, {w:'Prinsipp', a:'et'}, {w:'Fenomen', a:'et'},
+            {w:'Perspektiv', a:'et'}, {w:'Paradoks', a:'et'}, {w:'Inntrykk', a:'et'}, {w:'Budskap', a:'et'},
+            {w:'System', a:'et'}, {w:'Drama', a:'et'}, {w:'Klima', a:'et'}, {w:'Miljø', a:'et'},
+            {w:'Demokrati', a:'et'}, {w:'Samfunn', a:'et'}, {w:'Ansvar', a:'et'}, {w:'Tiltak', a:'et'},
+            {w:'Resultat', a:'et'}, {w:'Formål', a:'et'}, {w:'Innhold', a:'et'}, {w:'Mangfold', a:'et'},
+            {w:'Skjebne', a:'en'}, {w:'Suksess', a:'en'}, {w:'Interesse', a:'en'}, {w:'Omtale', a:'en'},
+            {w:'Gjennomføring', a:'en'}, {w:'Betydning', a:'en'}, {w:'Utvikling', a:'en'}, {w:'Rettighet', a:'en'}
+        ]
+    };
+
+    let score = 0, lives = 3, currentDifficulty = 'easy', currentWord = {};
+
+    function startGame(diff) {
+        currentDifficulty = diff;
+        score = 0; lives = 3;
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('modal-overlay').classList.add('hidden');
+        document.getElementById('play-screen').classList.remove('hidden');
+        document.getElementById('diff-label').innerText = diff.toUpperCase();
+        updateStats();
+        nextRound();
+    }
+
+    function nextRound() {
+        const pool = WORDS[currentDifficulty];
+        currentWord = pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById('word-display').innerText = currentWord.w;
+    }
+
+    function checkAnswer(choice) {
+        if (choice === currentWord.a) {
+            score++;
+            updateStats();
+            nextRound();
+        } else {
+            lives--;
+            updateStats();
+            document.getElementById('game-container').classList.add('shake');
+            setTimeout(() => document.getElementById('game-container').classList.remove('shake'), 400);
+            if (lives <= 0) {
+                showModal("Prøv igjen!", `Riktig: ${currentWord.a.toUpperCase()} ${currentWord.w.toUpperCase()}`);
+            } else {
+                nextRound();
+            }
+        }
+    }
+
+    function showModal(title, msg) {
+        document.getElementById('modal-msg').innerText = msg;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('modal-overlay').classList.remove('hidden');
+    }
+
+    function updateStats() {
+        document.getElementById('score').innerText = score;
+        document.getElementById('lives').innerText = lives;
+    }
+
+    function restartGame() { startGame(currentDifficulty); }
+    function goBack() {
+        document.getElementById('play-screen').classList.add('hidden');
+        document.getElementById('modal-overlay').classList.add('hidden');
+        document.getElementById('setup-screen').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
