@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Kjønnsmaskinen Pro - Fixed</title>
+    <title>Kjønnsmaskinen Pro - 600 Ord</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
         :root { 
@@ -29,7 +29,7 @@
 
         #play-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); z-index: 10; }
         #play-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; }
-        #word-display { font-size: 3.5rem; font-weight: 800; color: #fff; text-align: center; margin-bottom: 40px; }
+        #word-display { font-size: 3rem; font-weight: 800; color: #fff; text-align: center; margin-bottom: 40px; text-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
         .gender-btn { width: 100%; padding: 22px; border-radius: 18px; border: none; font-size: 1.7rem; font-weight: 800; cursor: pointer; background: #2d3748; color: #fff; margin-bottom: 15px; box-shadow: 0 4px 0 #1a202c; transition: 0.1s; }
         
         .btn-correct { background: var(--success) !important; box-shadow: 0 4px 0 #15803d !important; }
@@ -46,7 +46,7 @@
 <div id="game-container">
     <div id="main-menu">
         <h1 style="margin:0; font-size: 2.2rem; letter-spacing: -1px;">Kjønnsmaskinen</h1>
-        <p style="color:#64748b; margin-bottom: 20px;">Velg nivå!</p>
+        <p style="color:#64748b; margin-bottom: 20px;">600 ord. 3 liv. Lykke til!</p>
         
         <div class="level-select">
             <button class="opt-btn active" id="opt-easy" onclick="setDiff('easy')">LETT</button>
@@ -77,7 +77,7 @@
             <h2 style="margin:0">Ordbok</h2>
             <button onclick="closeStudy()" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer;">LUKK</button>
         </div>
-        <input type="text" id="wordSearch" class="search-box" placeholder="Søk..." onkeyup="filterWords()">
+        <input type="text" id="wordSearch" class="search-box" placeholder="Søk i 600 ord..." onkeyup="filterWords()">
         <div style="flex-grow:1; overflow-y:auto; background:rgba(255,255,255,0.02); border-radius:10px;">
             <table style="width:100%; border-collapse:collapse;"><tbody id="wordTableBody"></tbody></table>
         </div>
@@ -108,32 +108,29 @@
     let WORDS = [];
     let score = 0, lives = 3, currentDiff = 'easy', currentWord = {}, isPausing = false;
 
-    // --- FULL ORDLISTE (300 ORD) ---
-    const rawEasy = "Bil,Buss,Hund,Katt,Stol,Sofa,Vegg,Gutt,Mann,Skole,Park,Vei,Hage,Båt,Fisk,Fugl,Sekk,Nøkkel,Mobil,Skjerm,Ball,Kopp,Kniv,Gaffel,Ovn,Dør,Klokke,Flaske,Avis,Bok,Seng,Veske,Hytte,Tavle,Trapp,Gryte,Skje,Dyne,Pute,Lampe,Skuff,Kjeks,Skog,Fjell,Hus,Tak,Gulv,Vindu,Bord,Skap,Speil,Bilde,Lys,Glass,Fat,Slott,Land,Hav,Fly,Tog,Dyr,Barn,Navn,Svar,Eple,Egg,Brød,Kjøtt,Vann,Kart,Pass,Kamera,Hotell,Brev,Arbeid,Hode,Øye,Øre,Bein,Hjerte,Blod,Hår,Telt,Teppe,Belte,Smykke,Mål,Hull,Blad,Frø,Program,Sykkel,Lærer,Tallerken,Blyant,Øks,Saks,Vott,Sko,Lue";
-    const rawMedium = "Anledning,Avdeling,Betydning,Endring,Erfaring,Forklaring,Løsning,Mulighet,Sikkerhet,Virkelighet,Sykdom,Ungdom,Forfatter,Kunstner,Politiker,Innbygger,Situasjon,Tradisjon,Kvalitet,Aktivitet,Prosess,Utfordring,Forsikring,Regjering,Stilling,Utvikling,Opplevelse,Forståelse,Hensikt,Utsikt,Fremtid,Bakgrunn,Forskjell,Fornuft,Nettside,Samfunn,System,Problem,Resultat,Prosjekt,Produkt,Område,Klima,Tema,Drama,Firma,Bibliotek,Universitet,Kapittel,Eksempel,Fengsel,Menneske,Samarbeid,Intervju,Museum,Sentrum,Kritikk,Diskusjon,Kommune,Region,Suksess,Innsats,Metode,Analyse,Karakter,Konsept,Prinsipp,Budskap,Selskap,Ekteskap,Vennskap,Landskap,Kunnskap,Vitenskap,Hensyn,Bevis,Besøk,Forsøk,Angrep,Bidrag,Oppdrag,Mønster,Register,Våpen,Lager,Teater,Senter,Kontor,Kloster,Løfte,Møte,Spenning,Ledelse,Tjeneste,Ressurs,Periode,Energi,Ansvari,Sektor,Faktor";
-    const rawHard = "Tilværelse,Begrunnelse,Bekreftelse,Bevegelse,Skuffelse,Frustrasjon,Kompetanse,Konkurranse,Toleranse,Respekt,Tillit,Sannhet,Rettferdighet,Kjærlighet,Misunnelse,Vennlighet,Galskap,Tålmodighet,Hukommelse,Arv,Gjeld,Skatt,Inntekt,Utgift,Vekst,Makt,Kraft,Sjel,Verden,Natur,Kultur,Struktur,Arkitektur,Litteratur,Økonomi,Filosofi,Psykologi,Biologi,Energi,Kategori,Teori,Strategi,Demokrati,Byråkrati,Hierarki,Monarki,Departement,Dokument,Argument,Instrument,Element,Eksperiment,Miljø,Nivå,Individ,Fenomen,Kriterium,Paradoks,Symbol,Signal,Ritual,Potensial,Materiale,Scenarie,Kvartal,Intervall,Univers,Vers,Kurs,Bevisi,Paradis,Forhold,Innhold,Opphold,Mangfold,Forbilde,Tilfelle,Menneskei,Liv,Døgn,År,Tiår,Århundre,Millennium,Krav,Svari,Ansvar,Forsvar,Håp,Rop,Kjøp,Salg,Valg,Togi,Flagg,Bygg,Glimt,Punkt,Skritt,Sukk";
-
     function init() {
-        const saved = localStorage.getItem('myKjonnWords_Final');
+        const saved = localStorage.getItem('myKjonnWords_600');
         if (!saved) {
+            // Kombinerer alle 600 ordene her
+            const easy = [
+                ["Bil","en"],["Buss","en"],["Hund","en"],["Katt","en"],["Stol","en"],["Sofa","en"],["Vegg","en"],["Gutt","en"],["Mann","en"],["Skole","en"],["Park","en"],["Vei","en"],["Hage","en"],["Båt","en"],["Fisk","en"],["Fugl","en"],["Sekk","en"],["Nøkkel","en"],["Mobil","en"],["Skjerm","en"],["Ball","en"],["Kopp","en"],["Kniv","en"],["Gaffel","en"],["Ovn","en"],["Sykkel","en"],["Lærer","en"],["Blyant","en"],["Skog","en"],["Øks","en"],["Saks","en"],["Vott","en"],["Sko","en"],["Lue","en"],["Jakke","en"],["Bukse","en"],["Genser","en"],["Sokk","en"],["Kjeks","en"],["Tallerken","en"],["Radio","en"],["Penn","en"],["Paraply","en"],["Kam","en"],["Ring","en"],["Stein","en"],["Benk","en"],["Tannbørste","en"],["Hammer","en"],["Spiker","en"],["Dør","ei"],["Klokke","ei"],["Flaske","ei"],["Avis","ei"],["Bok","ei"],["Seng","ei"],["Veske","ei"],["Hytte","ei"],["Tavle","ei"],["Trapp","ei"],["Gryte","ei"],["Skje","ei"],["Dyne","ei"],["Pute","ei"],["Lampe","ei"],["Skuff","ei"],["Sol","ei"],["Stjerne","ei"],["Mark","ei"],["Flue","ei"],["Krone","ei"],["Geit","ei"],["Høne","ei"],["Bru","ei"],["Mynt","ei"],["Rose","ei"],["Sannhet","ei"],["Makt","ei"],["Kraft","ei"],["Sjel","ei"],["Hus","et"],["Tak","et"],["Gulv","et"],["Vindu","et"],["Bord","et"],["Skap","et"],["Speil","et"],["Bilde","et"],["Lys","et"],["Glass","et"],["Fat","et"],["Slott","et"],["Land","et"],["Hav","et"],["Fly","et"],["Tog","et"],["Dyr","et"],["Barn","et"],["Navn","et"],["Svar","et"],["Hest","en"],["Gris","en"],["Kake","en"],["Banan","en"],["Agurk","en"],["Tomat","en"],["Suppe","en"],["Juice","en"],["Melk","en"],["Ost","en"],["Skinke","en"],["Pølse","en"],["Film","en"],["Sang","en"],["Fest","en"],["Gave","en"],["Pris","en"],["Butikk","en"],["Kiosk","en"],["Kino","en"],["Innsjø","en"],["Strand","en"],["Venn","en"],["Nabo","en"],["Onkel","en"],["Tante","en"],["Hals","en"],["Arm","en"],["Mage","en"],["Rygg","en"],["Fot","en"],["Finger","en"],["Tå","en"],["Munn","en"],["Nese","en"],["Kinn","en"],["Panne","en"],["Sommer","en"],["Vinter","en"],["Høst","en"],["Vår","en"],["Morgen","en"],["Kveld","en"],["Dag","en"],["Natt","en"],["Time","en"],["Sno","ei"],["Tåke","ei"],["Sky","ei"],["Hånd","ei"],["Tann","ei"],["Sone","ei"],["Slette","ei"],["Vidde","ei"],["Høyde","ei"],["Grøft","ei"],["Helle","ei"],["Snor","ei"],["Flette","ei"],["Kone","ei"],["Mor","ei"],["Søster","ei"],["Bestemor","ei"],["Oldemor","ei"],["Datter","ei"],["Jente","ei"],["Kvinne","ei"],["Budeie","ei"],["Heks","ei"],["Fe","ei"],["Tre","et"],["Gras","et"],["Bær","et"],["Frø","et"],["Blad","et"],["Strå","et"],["Korn","et"],["Mel","et"],["Sukker","et"],["Salt","et"],["Krydder","et"],["Krus","et"],["Kjøkken","et"],["Bad","et"],["Rom","et"],["Loft","et"],["Hjørne","et"]
+            ];
+            const medium = [
+                ["Anledning","en"],["Betydning","en"],["Endring","en"],["Erfaring","en"],["Løsning","en"],["Mulighet","en"],["Sikkerhet","en"],["Ungdom","en"],["Forfatter","en"],["Kunstner","en"],["Situasjon","en"],["Tradisjon","en"],["Kvalitet","en"],["Aktivitet","en"],["Prosess","en"],["Regjering","en"],["Stilling","en"],["Utvikling","en"],["Opplevelse","en"],["Forståelse","en"],["Hensikt","en"],["Utsikt","en"],["Fremtid","en"],["Bakgrunn","en"],["Fornuft","en"],["Nettside","en"],["Kritikk","en"],["Diskusjon","en"],["Kommune","en"],["Region","en"],["Suksess","en"],["Innsats","en"],["Metode","en"],["Analyse","en"],["Karakter","en"],["Spenning","en"],["Ledelse","en"],["Tjeneste","en"],["Ressurs","en"],["Periode","en"],["Faktor","en"],["Sektor","en"],["Kultur","en"],["Natur","en"],["Maskin","en"],["Trafikk","en"],["Økonomi","en"],["Politikk","en"],["Energi","en"],["Kategori","en"],["Samfunn","et"],["System","et"],["Problem","et"],["Resultat","et"],["Prosjekt","et"],["Produkt","et"],["Område","et"],["Klima","et"],["Tema","et"],["Drama","et"],["Firma","et"],["Bibliotek","et"],["Kapittel","et"],["Eksempel","et"],["Fengsel","et"],["Menneske","et"],["Samarbeid","et"],["Intervju","et"],["Museum","et"],["Sentrum","et"],["Konsept","et"],["Prinsipp","et"],["Budskap","et"],["Selskap","et"],["Ekteskap","et"],["Vennskap","et"],["Landskap","et"],["Hensyn","et"],["Bevis","et"],["Besøk","et"],["Forsøk","et"],["Angrep","et"],["Bidrag","et"],["Oppdrag","et"],["Mønster","et"],["Register","et"],["Våpen","et"],["Lager","et"],["Teater","et"],["Senter","et"],["Kontor","et"],["Kloster","et"],["Løfte","et"],["Møte","et"],["Været","et"],["Kvartal","et"],["Intervall","et"],["Program","et"],["Nivå","et"],["Miljø","et"],["Artikkel","en"],["Rapport","en"],["Beskjed","en"],["Melding","en"],["Samtale","en"],["Debatt","en"],["Konflikt","en"],["Avtale","en"],["Kontrakt","en"],["Leder","en"],["Sjef","en"],["Kunde","en"],["Bruker","en"],["Eier","en"],["Gjest","en"],["Passasjer","en"],["Turist","en"],["Dommer","en"],["Lege","en"],["Sykepleier","en"],["Politi","en"],["Soldat","en"],["Pilot","en"],["Bonde","en"],["Fisker","en"],["Baker","en"],["Kokk","en"],["Servitør","en"],["Fabrikk","en"],["Garasje","en"],["Kjeller","en"],["Balkong","en"],["Terrasse","en"],["Veranda","en"],["Heis","en"],["Trapp","en"],["Gang","en"],["Stue","ei"],["Soverom","et"],["Verksted","et"],["Arkiv","et"],["Galleri","et"],["Studio","et"],["Anlegg","et"],["Bygg","et"],["Tårn","et"],["Gjerde","et"],["Flagg","et"],["Skilt","et"],["Blinklys","et"],["Sete","et"],["Ratt","et"],["Hjul","et"],["Dekk","et"],["Batteri","et"],["Apparat","et"],["Utstyr","et"],["Møbel","et"],["Teppe","et"],["Gardin","et"],["Laken","et"],["Håndkle","et"],["Plagg","et"],["Ur","et"],["Kjede","et"],["Armbånd","et"],["Behov","et"],["Ønske","et"],["Råd","et"],["Tips","et"],["Tegn","et"],["Spor","et"],["Tall","et"],["Ord","et"],["Ark","et"],["Heftet","et"],["Kort","et"],["Klipp","et"]
+            ];
+            const hard = [
+                ["Tilværelse","en"],["Begrunnelse","en"],["Bekreftelse","en"],["Bevegelse","en"],["Skuffelse","en"],["Frustrasjon","en"],["Kompetanse","en"],["Konkurranse","en"],["Toleranse","en"],["Respekt","en"],["Tillit","en"],["Rettferdighet","en"],["Kjærlighet","en"],["Misunnelse","en"],["Vennlighet","en"],["Galskap","en"],["Tålmodighet","en"],["Hukommelse","en"],["Inntekt","en"],["Utgift","en"],["Vekst","en"],["Struktur","en"],["Arkitektur","en"],["Litteratur","en"],["Filosofi","en"],["Psykologi","en"],["Biologi","en"],["Teori","en"],["Strategi","en"],["Presisjon","en"],["Innovasjon","en"],["Motivasjon","en"],["Inspirasjon","en"],["Definisjon","en"],["Instruksjon","en"],["Konstruksjon","en"],["Relasjon","en"],["Produksjon","en"],["Evaluering","en"],["Organisering","en"],["Finansiering","en"],["Prioritering","en"],["Virkelighet","en"],["Sykdom","en"],["Vitenskap","en"],["Kunnskap","en"],["Egenskap","en"],["Hemmelighet","en"],["Demokrati","et"],["Byråkrati","et"],["Hierarki","et"],["Monarki","et"],["Departement","et"],["Dokument","et"],["Argument","et"],["Instrument","et"],["Element","et"],["Eksperiment","et"],["Potensial","et"],["Materiale","et"],["Scenarie","et"],["Univers","et"],["Vers","et"],["Kurs","et"],["Paradis","et"],["Forhold","et"],["Innhold","et"],["Opphold","et"],["Mangfold","et"],["Forbilde","et"],["Tilfelle","et"],["Millennium","et"],["Ansvar","et"],["Forsvar","et"],["Salg","et"],["Valg","et"],["Bygg","et"],["Punkt","et"],["Skritt","et"],["Glimt","et"],["Sukk","et"],["Døgn","et"],["Århundre","et"],["Tiår","et"],["Tidsskrift","et"],["Uvesen","et"],["Vesen","et"],["Overskudd","et"],["Underskudd","et"],["Sammendrag","et"],["Fellesskap","et"],["Eierskap","et"],["Medlemskap","et"],["Verktøy","et"],["Krav","et"],["Håp","et"],["Rop","et"],["Kjøp","et"],["Ambisiøs","en"],["Arrogant","en"],["Entusiast","en"],["Pessimist","en"],["Optimist","en"],["Diplomat","en"],["Byråkrat","en"],["Demokrat","en"],["Aristokrat","en"],["Anarkist","en"],["Hypotese","en"],["Analyse","en"],["Syntese","en"],["Taktikk","en"],["Logikk","en"],["Etikk","en"],["Moral","en"],["Relatert","en"],["Relevant","en"],["Spesifikk","en"],["Generell","en"],["Absolutt","en"],["Relativ","en"],["Konkret","en"],["Abstrakt","en"],["Subjektiv","en"],["Objektiv","en"],["Karakteristikk","en"],["Komplikasjon","en"],["Konsekvens","en"],["Konklusjon","en"],["Kombinasjon","en"],["Kommunikasjon","en"],["Koordinator","en"],["Kreativitet","en"],["Fakultet","et"],["Institutt","et"],["Akademi","et"],["Laboratorium","et"],["Observatorium","et"],["Territorium","et"],["Scenario","et"],["Kriterium","et"],["Perspektiv","et"],["Alternativ","et"],["Initiativ","et"],["Direktiv","et"],["Adjektiv","et"],["Substantiv","et"],["Verb","et"],["Adverb","et"],["Pronomen","et"],["Preposisjon","et"],["Konjunksjon","et"],["Interjeksjon","et"],["Predikat","et"],["Subjekt","et"],["Objekt","et"],["Komplement","et"],["Adverbial","et"],["Morfem","et"],["Fonem","et"],["Leksikon","et"],["Vokabular","et"],["Anarki","et"],["Oligarki","et"],["Diktatur","et"],["Tyranni","et"],["Regime","et"],["Dogme","et"],["Ritual","et"],["Sakrament","et"],["Testamente","et"],["Evangelium","et"],["Dikt","et"],["Epos","et"],["Manuskript","et"],["Sertifikat","et"],["Diplom","et"],["Privilegium","et"],["Monopol","et"],["Patent","et"],["Veto","et"],["Forbud","et"]
+            ];
+
             const lib = [];
-            rawEasy.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'easy'}));
-            rawMedium.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'medium'}));
-            rawHard.split(',').forEach(w => lib.push({word: w, gender: getG(w), diff: 'hard'}));
+            easy.forEach(i => lib.push({word: i[0], gender: i[1], diff: 'easy'}));
+            medium.forEach(i => lib.push({word: i[0], gender: i[1], diff: 'medium'}));
+            hard.forEach(i => lib.push({word: i[0], gender: i[1], diff: 'hard'}));
             WORDS = lib;
-            localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS));
+            localStorage.setItem('myKjonnWords_600', JSON.stringify(WORDS));
         } else {
             WORDS = JSON.parse(saved);
         }
-    }
-
-    // Enkel logikk for å gjette kjønn til autogenerert liste (hvis ordet slutter på visse ting)
-    function getG(w) {
-        const etOrd = ["Hus","Vindu","Bord","Skap","Bilde","Lys","Glass","Slott","Land","Hav","Fly","Tog","Dyr","Barn","Navn","Svar","Eple","Egg","Brød","Kjøtt","Vann","Kart","Pass","Brev","Arbeid","Hode","Øye","Øre","Bein","Hjerte","Blod","Hår","Telt","Teppe","Belte","Mål","Hull","Blad","Frø","Program","Samfunn","System","Problem","Resultat","Prosjekt","Produkt","Område","Klima","Tema","Drama","Firma","Bibliotek","Universitet","Kapittel","Eksempel","Fengsel","Menneske","Samarbeid","Intervju","Museum","Sentrum","Konsept","Prinsipp","Budskap","Selskap","Ekteskap","Vennskap","Landskap","Hensyn","Bevis","Besøk","Forsøk","Angrep","Bidrag","Oppdrag","Mønster","Register","Våpen","Lager","Teater","Senter","Kontor","Kloster","Løfte","Møte","Demokrati","Byråkrati","Hierarki","Monarki","Departement","Dokument","Argument","Instrument","Element","Eksperiment","Miljø","Nivå","Individ","Fenomen","Kriterium","Paradoks","Symbol","Signal","Ritual","Potensial","Materiale","Scenarie","Kvartal","Intervall","Univers","Vers","Kurs","Paradis","Forhold","Innhold","Opphold","Mangfold","Forbilde","Tilfelle","Liv","Døgn","År","Tiår","Århundre","Millennium","Krav","Ansvar","Forsvar","Håp","Rop","Kjøp","Salg","Valg","Flagg","Bygg","Glimt","Punkt","Skritt","Sukk"];
-        const eiOrd = ["Dør","Klokke","Flaske","Avis","Bok","Seng","Veske","Hytte","Tavle","Trapp","Gryte","Skje","Dyne","Pute","Lampe","Skuff","Sannhet","Makt","Kraft","Sjel"];
-        if (etOrd.includes(w)) return 'et';
-        if (eiOrd.includes(w)) return 'ei';
-        return 'en';
     }
 
     function setDiff(diff) {
@@ -143,11 +140,6 @@
     }
 
     function startGame() {
-        const pool = WORDS.filter(w => w.diff === currentDiff);
-        if (pool.length === 0) {
-            alert("Feil: Ingen ord funnet i denne kategorien!");
-            return;
-        }
         score = 0; lives = 3; isPausing = false;
         updateUI();
         document.getElementById('main-menu').classList.add('hidden');
@@ -164,10 +156,7 @@
 
     function next() {
         isPausing = false;
-        ['en','ei','et'].forEach(g => {
-            const b = document.getElementById('btn-' + g);
-            b.classList.remove('btn-correct', 'btn-wrong');
-        });
+        ['en','ei','et'].forEach(g => document.getElementById('btn-' + g).classList.remove('btn-correct', 'btn-wrong'));
         document.getElementById('play-content').classList.remove('shake');
         
         const pool = WORDS.filter(w => w.diff === currentDiff);
@@ -178,29 +167,21 @@
     function check(guess) {
         if (isPausing) return;
         isPausing = true;
-
         const correct = currentWord.gender;
-        const btnCorrect = document.getElementById('btn-' + correct);
-        const btnGuessed = document.getElementById('btn-' + guess);
-
         if (guess === correct) {
             score++;
-            btnGuessed.classList.add('btn-correct');
+            document.getElementById('btn-' + guess).classList.add('btn-correct');
             updateUI();
             setTimeout(next, 500);
         } else {
             lives--;
             updateUI();
-            btnGuessed.classList.add('btn-wrong');
-            btnCorrect.classList.add('btn-correct');
+            document.getElementById('btn-' + guess).classList.add('btn-wrong');
+            document.getElementById('btn-' + correct).classList.add('btn-correct');
             document.getElementById('play-content').classList.add('shake');
-            
             setTimeout(() => {
-                if (lives <= 0) {
-                    endGame();
-                } else {
-                    next();
-                }
+                if (lives <= 0) endGame();
+                else next();
             }, 1000);
         }
     }
@@ -211,7 +192,6 @@
         document.getElementById('modal-overlay').classList.remove('hidden');
     }
 
-    // Ordbok-funksjoner
     function openStudy() {
         const tbody = document.getElementById('wordTableBody');
         tbody.innerHTML = WORDS.map((w, i) => `
@@ -223,21 +203,25 @@
         `).join('');
         document.getElementById('study-screen').classList.remove('hidden');
     }
+    
     function filterWords() {
         const q = document.getElementById('wordSearch').value.toLowerCase();
         const rows = document.getElementById('wordTableBody').getElementsByTagName('tr');
         for(let r of rows) r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
     }
-    function deleteWord(i) { WORDS.splice(i,1); localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS)); openStudy(); }
+    
+    function deleteWord(i) { WORDS.splice(i,1); localStorage.setItem('myKjonnWords_600', JSON.stringify(WORDS)); openStudy(); }
+    
     function saveNewWord() {
         const word = document.getElementById('newWord').value.trim();
         const gender = document.getElementById('newGender').value;
         const diff = document.getElementById('newDiff').value;
         if(!word) return;
         WORDS.push({word: word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(), gender, diff});
-        localStorage.setItem('myKjonnWords_Final', JSON.stringify(WORDS));
+        localStorage.setItem('myKjonnWords_600', JSON.stringify(WORDS));
         closeAdd();
     }
+    
     function openAdd() { document.getElementById('add-screen').classList.remove('hidden'); }
     function closeAdd() { document.getElementById('add-screen').classList.add('hidden'); }
     function closeStudy() { document.getElementById('study-screen').classList.add('hidden'); }
